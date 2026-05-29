@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zaira Akhtar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080808;
+  --fg:#e8e4dc;
+  --dim:rgba(232,228,220,0.28);
+  --dimmer:rgba(232,228,220,0.12);
+  --serif:'Lora',Georgia,serif;
+  --sans:'Inter',sans-serif;
+}
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--sans);
+  font-weight:300;
+  font-size:16px;
+  line-height:1;
+  -webkit-font-smoothing:antialiased;
+  cursor:none;
+  overflow-x:hidden;
+}
+
+/* ── CURSOR ─────────────────────────────────────── */
+#cur{
+  position:fixed;
+  width:5px;height:5px;
+  background:var(--fg);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:difference;
+  transition:transform .15s,width .4s,height .4s;
+}
+#cur.big{width:32px;height:32px;background:transparent;border:1px solid rgba(232,228,220,.3)}
+
+/* ── NAV ─────────────────────────────────────────── */
+nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  padding:1.8rem 2.2rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  mix-blend-mode:difference;
+}
+.nav-id{
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--dim);
+  font-family:var(--sans);
+}
+.nav-right{
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--dimmer);
+}
+
+/* ── SCREEN: full-height section ─────────────────── */
+.screen{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:0 2.2rem;
+  position:relative;
+}
+.screen.tall{min-height:160vh}
+.screen.short{min-height:60vh}
+
+/* ── MESSAGE BLOCKS ──────────────────────────────── */
+.msg{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity 1.1s cubic-bezier(.16,1,.3,1),
+             transform 1.1s cubic-bezier(.16,1,.3,1);
+  max-width:540px;
+}
+.msg.show{opacity:1;transform:none}
+
+/* delay helpers */
+.d1{transition-delay:.15s}
+.d2{transition-delay:.35s}
+.d3{transition-delay:.6s}
+.d4{transition-delay:.9s}
+.d5{transition-delay:1.2s}
+
+/* ── TEXT STYLES ─────────────────────────────────── */
+.t-huge{
+  font-family:var(--serif);
+  font-size:clamp(2.8rem,7vw,6rem);
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:-.01em;
+  color:var(--fg);
+}
+.t-huge em{font-style:italic;color:rgba(232,228,220,.55)}
+
+.t-large{
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,4vw,3.2rem);
+  font-weight:400;
+  line-height:1.2;
+  color:var(--fg);
+}
+.t-large em{font-style:italic}
+
+.t-body{
+  font-size:15px;
+  font-weight:300;
+  line-height:1.8;
+  color:rgba(232,228,220,.55);
+  max-width:420px;
+}
+.t-body strong{color:var(--fg);font-weight:400}
+
+.t-label{
+  font-size:11px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:rgba(232,228,220,.25);
+  font-family:var(--sans);
+}
+
+.t-link{
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(232,228,220,.35);
+  text-decoration:none;
+  font-family:var(--sans);
+  border-bottom:1px solid rgba(232,228,220,.12);
+  padding-bottom:1px;
+  transition:color .3s,border-color .3s;
+}
+.t-link:hover{color:var(--fg);border-color:rgba(232,228,220,.4)}
+
+/* ── SPACER ──────────────────────────────────────── */
+.sp{display:block;height:8px}
+.sp2{display:block;height:16px}
+.sp3{display:block;height:28px}
+
+/* ── TYPING INDICATOR ────────────────────────────── */
+.typing{
+  display:inline-flex;
+  gap:5px;
+  align-items:center;
+  opacity:0;
+  transition:opacity .6s;
+  padding:2px 0;
+}
+.typing.show{opacity:1}
+.typing span{
+  width:4px;height:4px;
+  border-radius:50%;
+  background:rgba(232,228,220,.3);
+  animation:blink 1.2s ease-in-out infinite;
+}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{
+  0%,100%{opacity:.2;transform:scale(.8)}
+  50%{opacity:1;transform:scale(1.2)}
+}
+
+/* ── GRAYSCALE IMAGE ─────────────────────────────── */
+.img-wrap{
+  width:220px;
+  height:140px;
+  overflow:hidden;
+  opacity:0;
+  transition:opacity 1.4s cubic-bezier(.16,1,.3,1);
+  position:relative;
+}
+.img-wrap.show{opacity:1}
+.img-wrap canvas{width:100%;height:100%;display:block}
+
+/* ── DIVIDER ─────────────────────────────────────── */
+.rule{
+  width:32px;height:1px;
+  background:rgba(232,228,220,.15);
+  display:block;
+  margin:2.5rem 0;
+  opacity:0;
+  transition:opacity 1s,width 1s cubic-bezier(.16,1,.3,1);
+}
+.rule.show{opacity:1;width:32px}
+
+/* ── CURSOR BIG on links ─────────────────────────── */
+
+/* ── CONTACT SECTION ─────────────────────────────── */
+.contact-line{
+  display:flex;
+  flex-direction:column;
+  gap:.9rem;
+}
+
+/* ── FOOTER ──────────────────────────────────────── */
+footer{
+  padding:2rem 2.2rem 2.5rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+.ft{
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(232,228,220,.14);
+}
+
+/* ── SCROLL HINT ─────────────────────────────────── */
+.scroll-hint{
+  position:absolute;
+  bottom:2.5rem;
+  left:2.2rem;
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--dimmer);
+  opacity:0;
+  transition:opacity 1s;
+  animation:none;
+}
+.scroll-hint.show{opacity:1}
+
+/* ── PROJECT INDENT ─────────────────────────────── */
+.indent{padding-left:1.2rem;border-left:1px solid rgba(232,228,220,.1)}
+
+
+/* ── TRUST PILL ───────────────────────────── */
+.trust-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:.55rem;
+  padding:.45rem .9rem;
+  border:1px solid rgba(232,228,220,.1);
+  border-radius:100px;
+}
+.trust-dot{
+  width:5px;height:5px;
+  border-radius:50%;
+  background:#5cdf8a;
+  flex-shrink:0;
+  animation:tpulse 2.2s ease-in-out infinite;
+}
+@keyframes tpulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(92,223,138,.4)}
+  50%{opacity:.7;box-shadow:0 0 0 4px rgba(92,223,138,0)}
+}
+.trust-text{
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:rgba(232,228,220,.28);
+  font-family:var(--sans);
+}
+
+/* ── PARALLAX IMAGE ─────────────────────── */
+.parallax-img{
+  will-change:transform;
+  transition:opacity 1.4s cubic-bezier(.16,1,.3,1), transform .1s linear;
+}
+
+/* ── SCROLL PROGRESS LINE ──────────────── */
+#progress{
+  position:fixed;
+  right:2.2rem;
+  left:auto;
+  top:50%;
+  transform:translateY(-50%);
+  width:1px;
+  height:80px;
+  z-index:90;
+  overflow:hidden;
+  pointer-events:none;
+}
+#progress-track{
+  width:1px;
+  height:100%;
+  background:rgba(232,228,220,.07);
+}
+#progress-fill{
+  width:1px;
+  height:0%;
+  background:rgba(232,228,220,.3);
+  transition:height .15s;
+}
+
+/* hide progress line on small screens (avoid overlap) */
+@media (max-width: 720px){
+  #progress{display:none}
+  body{cursor:auto}
+  #cur{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+
+<nav>
+  <span class="nav-id">ZA</span>
+  <span class="nav-right">2025</span>
+</nav>
+
+<div id="progress"><div id="progress-track"><div id="progress-fill"></div></div></div>
+
+<div id="scroll">
+
+  <!-- 01 OPENING -->
+  <div class="screen" id="s0">
+    <div class="msg" id="m0a">
+      <span class="t-huge">Hey.</span>
+    </div>
+    <span class="sp3"></span><span class="sp3"></span>
+    <div class="msg d2" id="m0b">
+      <span class="t-huge">I'm <em>Zaira</em>.</span>
+    </div>
+    <div class="scroll-hint" id="hint0">scroll</div>
+  </div>
+
+  <!-- 02 WHAT I DO -->
+  <div class="screen" id="s1">
+    <div class="msg" id="m1a">
+      <span class="typing" id="ty1">
+        <span></span><span></span><span></span>
+      </span>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d1" id="m1b">
+      <p class="t-large">I design digital<br>experiences.</p>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d3" id="m1c">
+      <p class="t-body">UI/UX, brand identity, frontend development.<br>
+      The kind of work that sits between<br>
+      <strong>feeling</strong> and <strong>function</strong>.</p>
+    </div>
+  </div>
+
+  <!-- 03 HAVEN -->
+  <div class="screen tall" id="s2">
+    <div class="msg" id="m2a">
+      <span class="t-label">Currently building</span>
+    </div>
+    <span class="sp2"></span>
+    <div class="msg d1" id="m2b">
+      <span class="t-huge">Haven.</span>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d2" id="m2c">
+      <div class="indent">
+        <p class="t-body">A proximity-based social platform.<br>
+        For campuses. Hostels. Co-living spaces.<br><br>
+        <strong>For the people right next to you</strong><br>
+        you've never met.</p>
+      </div>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d2" id="m2trust">
+      <div class="trust-pill">
+        <span class="trust-dot"></span>
+        <span class="trust-text">Co-founder 2025</span>
+      </div>
+    </div>
+    <span class="sp3"></span>
+    <div class="img-wrap parallax-img" id="img2d">
+      <canvas id="c2" width="440" height="280"></canvas>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d4" id="m2e">
+      <p class="t-body" style="font-style:italic;color:rgba(232,228,220,.22)">
+        "Who around you is as obsessed?"
+      </p>
+    </div>
+  </div>
+
+  <!-- 04 MRIDHUV -->
+  <div class="screen" id="s3">
+    <div class="msg" id="m3a">
+      <span class="t-label">Mridhuv Associates</span>
+    </div>
+    <span class="sp2"></span>
+    <div class="msg d1" id="m3b">
+      <p class="t-large">Legal consultancy,<br><em>made legible.</em></p>
+    </div>
+    <span class="sp2"></span>
+    <div class="msg d1" id="m3link">
+      <a class="t-link" href="https://www.mridhuvassociates.com/" target="_blank" rel="noopener noreferrer">mridhuvassociates.com</a>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d2" id="m3c">
+      <div class="indent">
+        <p class="t-body">Designed and built the full frontend —<br>
+        cleaner architecture, responsive layouts,<br>
+        a site that finally felt like the firm deserved.</p>
+      </div>
+    </div>
+    <div class="rule" id="r3"></div>
+    <div class="msg d3" id="m3d">
+      <span class="t-label">UI/UX &nbsp;·&nbsp; Frontend Development &nbsp;·&nbsp; 2025</span>
+    </div>
+  </div>
+
+  <!-- 05 BIOTECH -->
+  <div class="screen" id="s4">
+    <div class="msg" id="m4a">
+      <span class="t-label">Biotech Solutions</span>
+    </div>
+    <span class="sp2"></span>
+    <div class="msg d1" id="m4b">
+      <p class="t-large">Packaging that<br><em>earns the shelf.</em></p>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d2" id="m4c">
+      <div class="indent">
+        <p class="t-body">Labels and packaging layouts<br>
+        for cleaning products. Clarity. Consistency.<br>
+        Presence. The kind of design<br>
+        that works before anyone reads it.</p>
+      </div>
+    </div>
+    <div class="rule" id="r4"></div>
+    <div class="msg d3" id="m4d">
+      <span class="t-label">Packaging Design &nbsp;·&nbsp; 2025</span>
+    </div>
+  </div>
+
+  <!-- 06 UNIQUE PLANNERS -->
+  <div class="screen" id="s5">
+    <div class="msg" id="m5a">
+      <span class="t-label">Unique Planners</span>
+    </div>
+    <span class="sp2"></span>
+    <div class="msg d1" id="m5b">
+      <p class="t-large">Identity that<br><em>lasts decades.</em></p>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d2" id="m5c">
+      <div class="indent">
+        <p class="t-body">A visual identity built on geometry,<br>
+        balance, and the kind of restraint<br>
+        that reads as timeless.</p>
+      </div>
+    </div>
+    <div class="rule" id="r5"></div>
+    <div class="msg d3" id="m5d">
+      <span class="t-label">Brand Identity &nbsp;·&nbsp; Logo &nbsp;·&nbsp; 2024</span>
+    </div>
+  </div>
+
+  <!-- 07 HIDDEN BAKERS -->
+  <div class="screen" id="s6">
+    <div class="msg" id="m6a">
+      <span class="t-label">Hidden Bakers</span>
+    </div>
+    <span class="sp2"></span>
+    <div class="msg d1" id="m6b">
+      <p class="t-large">Warm. Simple.<br><em>Handcrafted.</em></p>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d2" id="m6c">
+      <div class="indent">
+        <p class="t-body">A bakery identity built from<br>
+        typography and touch. Approachable<br>
+        from the very first glance.</p>
+      </div>
+    </div>
+    <div class="rule" id="r6"></div>
+    <div class="msg d3" id="m6d">
+      <span class="t-label">Logo &amp; Visual Identity &nbsp;·&nbsp; 2023</span>
+    </div>
+  </div>
+
+  <!-- 08 CONTACT -->
+  <div class="screen" id="s7">
+    <div class="msg" id="m7a">
+      <span class="typing" id="ty7">
+        <span></span><span></span><span></span>
+      </span>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d1" id="m7b">
+      <p class="t-large">Let's talk.</p>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d2" id="m7c">
+      <div class="contact-line">
+        <a href="mailto:iamzaira2@gmail.com" class="t-link">iamzaira2@gmail.com</a>
+        <a href="tel:+916005496182" class="t-link">+91 6005 496 182</a>
+        <a href="https://github.com/ZairaAk" target="_blank" class="t-link">github.com/ZairaAk</a>
+      </div>
+    </div>
+    <span class="sp3"></span>
+    <div class="msg d3" id="m7d">
+      <p class="t-body" style="color:rgba(232,228,220,.16)">
+        Bengaluru, India
+      </p>
+    </div>
+  </div>
+
+</div><!-- /scroll -->
+
+<footer>
+  <span class="ft">Zaira Akhtar &copy; 2025</span>
+  <span class="ft">UI/UX · Brand · Cofounder</span>
+</footer>
+
+<script>
+// ─── AUDIO: click on tap/click, whoosh on scroll ──────────
+let AC=null;
+let audioUnlocked=false;
+function getAC(){
+  if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended') AC.resume();
+  return AC;
+}
+function playClick(){
+  if(!audioUnlocked) return;
+  try{
+    const ac=getAC();
+    const o=ac.createOscillator();
+    const g=ac.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(520,ac.currentTime);
+    o.frequency.exponentialRampToValueAtTime(220,ac.currentTime+0.04);
+    g.gain.setValueAtTime(0.0001,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.03,ac.currentTime+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+0.06);
+    o.connect(g);
+    g.connect(ac.destination);
+    o.start();
+    o.stop(ac.currentTime+0.065);
+  }catch(e){}
+}
+function playWhoosh(){
+  if(!audioUnlocked) return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try{
+    const ac=getAC();
+    const len=Math.floor(ac.sampleRate*0.18);
+    const buf=ac.createBuffer(1,len,ac.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+    const src=ac.createBufferSource();
+    src.buffer=buf;
+    const lp=ac.createBiquadFilter();
+    lp.type='lowpass';
+    lp.frequency.value=800;
+    lp.Q.value=0.5;
+    const gain=ac.createGain();
+    gain.gain.setValueAtTime(0,ac.currentTime);
+    gain.gain.linearRampToValueAtTime(0.04,ac.currentTime+0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+0.18);
+    src.connect(lp);
+    lp.connect(gain);
+    gain.connect(ac.destination);
+    src.start();
+    src.stop(ac.currentTime+0.19);
+  }catch(e){}
+}
+
+function unlockAudio(){
+  audioUnlocked=true;
+  try{ getAC(); }catch(e){}
+  window.removeEventListener('pointerdown',unlockAudio);
+  window.removeEventListener('keydown',unlockAudio);
+}
+window.addEventListener('pointerdown',unlockAudio,{ once:true, passive:true });
+window.addEventListener('keydown',unlockAudio,{ once:true });
+
+// click sound on any click/tap (including first one)
+window.addEventListener('pointerdown',()=>{
+  if(!audioUnlocked) unlockAudio();
+  playClick();
+},{ passive:true });
+
+// throttle: one whoosh every 200ms max
+let lastSY=window.scrollY, sticking=false, sCool=false;
+window.addEventListener('scroll',()=>{
+  if(sticking) return;
+  sticking=true;
+  requestAnimationFrame(()=>{
+    const dy=Math.abs(window.scrollY-lastSY);
+    if(dy>10 && !sCool){
+      playWhoosh();
+      sCool=true;
+      setTimeout(()=>{ sCool=false; },200);
+    }
+    lastSY=window.scrollY;
+    sticking=false;
+  });
+},{ passive:true });
+
+// ─── SCROLL PROGRESS LINE ────────────────────────────────
+const pFill=document.getElementById('progress-fill');
+function updateProgress(){
+  const total=document.body.scrollHeight-window.innerHeight;
+  const pct=total>0?(window.scrollY/total*100):0;
+  if(pFill) pFill.style.height=pct+'%';
+}
+window.addEventListener('scroll',updateProgress,{ passive:true });
+
+// ─── PARALLAX on Haven image ─────────────────────────────
+const pImg=document.getElementById('img2d');
+function doParallax(){
+  if(!pImg) return;
+  const rect=pImg.getBoundingClientRect();
+  const center=rect.top+rect.height/2-window.innerHeight/2;
+  pImg.style.transform='translateY('+(-center*0.06).toFixed(1)+'px)';
+}
+window.addEventListener('scroll',doParallax,{ passive:true });
+
+// ─── CURSOR ──────────────────────────────────────────────
+const cur=document.getElementById('cur');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+document.querySelectorAll('a').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+
+// ─── GRAYSCALE NOISE CANVAS (Haven image) ─────────────────
+(function(){
+  const cv=document.getElementById('c2');
+  if(!cv) return;
+  const cx=cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  const grad=cx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'#111');
+  grad.addColorStop(.5,'#1a1a1a');
+  grad.addColorStop(1,'#0a0a0a');
+  cx.fillStyle=grad;
+  cx.fillRect(0,0,W,H);
+  const lights=[
+    {x:.18,y:.62,r:18},{x:.35,y:.58,r:12},{x:.52,y:.65,r:20},
+    {x:.67,y:.55,r:10},{x:.78,y:.61,r:14},{x:.88,y:.58,r:8},
+    {x:.25,y:.72,r:8},{x:.60,y:.70,r:9},{x:.43,y:.48,r:5},
+    {x:.10,y:.55,r:7},{x:.92,y:.68,r:6}
+  ];
+  lights.forEach(l=>{
+    const g2=cx.createRadialGradient(l.x*W,l.y*H,0,l.x*W,l.y*H,l.r*2.5);
+    g2.addColorStop(0,'rgba(200,190,170,0.18)');
+    g2.addColorStop(1,'rgba(0,0,0,0)');
+    cx.fillStyle=g2;
+    cx.beginPath();
+    cx.arc(l.x*W,l.y*H,l.r*3,0,Math.PI*2);
+    cx.fill();
+  });
+  const id=cx.getImageData(0,0,W,H);
+  const dd=id.data;
+  for(let i=0;i<dd.length;i+=4){
+    const n=(Math.random()-.5)*18;
+    dd[i]+=n; dd[i+1]+=n; dd[i+2]+=n;
+  }
+  cx.putImageData(id,0,0);
+  for(let j=0;j<3;j++){
+    const yy=(0.55+j*.07)*H;
+    const sg=cx.createLinearGradient(0,yy,W,yy);
+    sg.addColorStop(0,'transparent');
+    sg.addColorStop(.4,'rgba(180,170,155,0.04)');
+    sg.addColorStop(.6,'rgba(180,170,155,0.04)');
+    sg.addColorStop(1,'transparent');
+    cx.fillStyle=sg;
+    cx.fillRect(0,yy-1,W,2);
+  }
+})();
+
+// ─── INTERSECTION OBSERVER — reveal only, no sound ────────
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('show');
+  });
+},{ threshold:0.18, rootMargin:'0px 0px -60px 0px' });
+document.querySelectorAll('.msg,.rule,.img-wrap').forEach(el=>obs.observe(el));
+
+// ─── TYPING INDICATORS ────────────────────────────────────
+const ty1=document.getElementById('ty1');
+const ty7=document.getElementById('ty7');
+const tyObs=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const ty=entry.target;
+      ty.classList.add('show');
+      setTimeout(()=>{ ty.style.opacity='0'; },900);
+    }
+  });
+},{ threshold:.3 });
+if(ty1) tyObs.observe(ty1);
+if(ty7) tyObs.observe(ty7);
+
+// ─── INITIAL LOAD SEQUENCE ────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(()=>{ document.getElementById('m0a')?.classList.add('show'); },300);
+  setTimeout(()=>{ document.getElementById('m0b')?.classList.add('show'); },900);
+  setTimeout(()=>{ document.getElementById('hint0')?.classList.add('show'); },1700);
+});
+
+// ─── SCROLL HINT HIDE ─────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  document.getElementById('hint0')?.classList.remove('show');
+},{ once:true, passive:true });
+
+</script>
+</body>
+</html>
