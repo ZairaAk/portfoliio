@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zaira Akhtar — UX/UI Designer & Startup Cofounder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ec;
+    --cream: #ede9e0;
+    --accent: #c8f54a;
+    --accent2: #ff6b35;
+    --mid: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: rgba(245,242,236,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  #cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(200,245,74,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width: 60px; height: 60px; opacity: 0.5; }
+
+  /* ── LOADER ── */
+  #loader {
+    position: fixed; inset: 0; background: var(--black); z-index: 9990;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 24px;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loader.hide { opacity: 0; visibility: hidden; }
+  .loader-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 6vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    overflow: hidden;
+    display: flex;
+  }
+  .loader-name span {
+    display: inline-block;
+    animation: loaderReveal 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  .loader-bar {
+    width: 200px; height: 2px; background: rgba(245,242,236,0.1); border-radius: 2px; overflow: hidden;
+  }
+  .loader-progress {
+    height: 100%; background: var(--accent); border-radius: 2px;
+    animation: loadProgress 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  @keyframes loadProgress { from { width: 0; } to { width: 100%; } }
+  @keyframes loaderReveal { to { opacity: 1; transform: translateY(0); } }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 20px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    transition: background 0.4s ease, padding 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(16px);
+    padding: 14px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    color: rgba(245,242,236,0.6);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: var(--black);
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .nav-cta:hover { transform: scale(1.04); background: #d4f865; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 40px 60px;
+    position: relative;
+    overflow: hidden;
+    gap: 40px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(200,245,74,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-noise {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .hero-left { position: relative; z-index: 2; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(200,245,74,0.08);
+    border: 1px solid rgba(200,245,74,0.2);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(1.4); } }
+  .hero-h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(52px, 6.5vw, 88px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 2.1s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .hero-h1 em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 17px;
+    color: rgba(245,242,236,0.55);
+    line-height: 1.65;
+    max-width: 420px;
+    margin-bottom: 40px;
+    font-weight: 300;
+    animation: fadeUp 0.8s 2.2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .hero-actions {
+    display: flex; align-items: center; gap: 20px;
+    animation: fadeUp 0.8s 2.3s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(200,245,74,0.25); }
+  .btn-ghost {
+    color: rgba(245,242,236,0.7);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: color 0.2s;
+    border-bottom: 1px solid rgba(245,242,236,0.2);
+    padding-bottom: 2px;
+  }
+  .btn-ghost:hover { color: var(--white); }
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center; align-items: center;
+    animation: fadeUp 0.8s 2.1s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .hero-img-wrap {
+    position: relative;
+    width: min(400px, 100%);
+  }
+  .hero-img-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(200,245,74,0.3), transparent 50%, rgba(255,107,53,0.15));
+    z-index: 1;
+  }
+  .hero-photo {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 22px;
+    display: block;
+    filter: grayscale(20%) contrast(1.05);
+    position: relative; z-index: 0;
+  }
+  .hero-badge {
+    position: absolute;
+    bottom: -20px; left: -20px;
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 20px;
+    backdrop-filter: blur(16px);
+    z-index: 3;
+    min-width: 160px;
+  }
+  .hero-badge .badge-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .hero-badge .badge-label {
+    font-size: 12px; color: rgba(245,242,236,0.5);
+  }
+  .hero-badge2 {
+    position: absolute;
+    top: 30px; right: -24px;
+    background: var(--accent);
+    border-radius: 12px;
+    padding: 12px 16px;
+    z-index: 3;
+  }
+  .hero-badge2 .b2-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700;
+    color: var(--black);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(245,242,236,0.35);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: fadeUp 0.8s 2.5s both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, transparent, rgba(245,242,236,0.3));
+    animation: scrollAnim 2s ease-in-out infinite;
+  }
+  @keyframes scrollAnim { 0%,100% { transform:scaleY(1); opacity:1; } 50% { transform:scaleY(0.5); opacity:0.5; } }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    background: rgba(200,245,74,0.02);
+  }
+  .marquee-track {
+    display: flex; gap: 48px;
+    white-space: nowrap;
+    animation: marquee 22s linear infinite;
+  }
+  .marquee-item {
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,242,236,0.35);
+    flex-shrink: 0;
+  }
+  .marquee-dot { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+  @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 100px 40px; }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .section-h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 4.5vw, 60px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .section-h2 em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: rgba(245,242,236,0.45);
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+  }
+  #about::before {
+    content: 'ABOUT';
+    position: absolute;
+    top: -20px; right: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(80px, 12vw, 160px);
+    font-weight: 800;
+    color: rgba(245,242,236,0.025);
+    letter-spacing: -0.05em;
+    pointer-events: none;
+    user-select: none;
+  }
+  .about-photo-wrap {
+    position: relative;
+  }
+  .about-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 20px;
+    filter: grayscale(15%);
+    display: block;
+  }
+  .about-sticker {
+    position: absolute;
+    background: var(--accent);
+    color: var(--black);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transform: rotate(-4deg);
+    top: 24px; right: -16px;
+  }
+  .about-sticker2 {
+    position: absolute;
+    background: var(--mid);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    border-radius: 16px;
+    bottom: 24px; left: -20px;
+  }
+  .about-sticker2 .s2-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px; font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .about-sticker2 .s2-text { font-size: 12px; color: rgba(245,242,236,0.5); margin-top: 4px; }
+  .about-body { font-size: 17px; color: rgba(245,242,236,0.65); line-height: 1.7; font-weight: 300; }
+  .about-body strong { color: var(--white); font-weight: 500; }
+  .about-bio { margin-bottom: 32px; }
+  .about-facts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 32px;
+  }
+  .fact-card {
+    background: rgba(245,242,236,0.04);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .fact-card:hover { border-color: rgba(200,245,74,0.3); background: rgba(200,245,74,0.04); }
+  .fact-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
+  .fact-value { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); }
+
+  /* ── PROJECTS ── */
+  #projects { background: rgba(245,242,236,0.02); }
+  .projects-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 60px; flex-wrap: wrap; gap: 20px;
+  }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 20px;
+  }
+  .proj-card {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    background: var(--mid);
+    border: 1px solid var(--border);
+    cursor: none;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+  }
+  .proj-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+  .proj-card.large { grid-column: span 7; min-height: 420px; }
+  .proj-card.small { grid-column: span 5; min-height: 420px; }
+  .proj-card.full { grid-column: span 12; min-height: 280px; }
+  .proj-card.half { grid-column: span 6; min-height: 300px; }
+  .proj-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .proj-bg-pattern {
+    width: 100%; height: 100%;
+    position: absolute; inset: 0;
+  }
+  .proj-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.4) 50%, transparent 100%);
+    z-index: 1;
+  }
+  .proj-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 28px; z-index: 2;
+  }
+  .proj-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 12px;
+  }
+  .proj-tag {
+    background: rgba(200,245,74,0.12);
+    border: 1px solid rgba(200,245,74,0.2);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .proj-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+  .proj-desc { font-size: 14px; color: rgba(245,242,236,0.6); line-height: 1.5; }
+  .proj-arrow {
+    position: absolute; top: 24px; right: 24px;
+    width: 40px; height: 40px;
+    background: rgba(245,242,236,0.08);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    z-index: 2;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .proj-card:hover .proj-arrow { background: var(--accent); color: var(--black); transform: rotate(45deg); }
+  .proj-year {
+    position: absolute; top: 24px; left: 24px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(245,242,236,0.4);
+    z-index: 2;
+  }
+
+  /* SVG BG patterns */
+  .bg-mridhuv { background: linear-gradient(135deg, #0f1f0f 0%, #1a2f1a 100%); }
+  .bg-haven { background: linear-gradient(135deg, #1a0f1f 0%, #2d1a3f 100%); }
+  .bg-oozy { background: linear-gradient(135deg, #1f1a0a 0%, #3f3010 100%); }
+  .bg-logos { background: linear-gradient(135deg, #0f1a1f 0%, #0f2030 100%); }
+  .bg-posters { background: linear-gradient(135deg, #1f0f0a 0%, #3f1a10 100%); }
+
+  /* ── SKILLS ── */
+  #skills {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .skills-left { position: sticky; top: 120px; }
+  .skill-groups { display: flex; flex-direction: column; gap: 40px; }
+  .skill-group-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--muted); margin-bottom: 14px; font-weight: 600;
+  }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-pill {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    color: rgba(245,242,236,0.75);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .skill-pill:hover {
+    border-color: rgba(200,245,74,0.4);
+    color: var(--accent);
+    background: rgba(200,245,74,0.06);
+  }
+  .skill-pill.accent {
+    background: rgba(200,245,74,0.08);
+    border-color: rgba(200,245,74,0.25);
+    color: var(--accent);
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .tool-card {
+    background: rgba(245,242,236,0.04);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 18px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .tool-card:hover {
+    border-color: rgba(200,245,74,0.3);
+    background: rgba(200,245,74,0.05);
+    transform: translateY(-3px);
+  }
+  .tool-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+  .tool-name { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(245,242,236,0.7); }
+
+  /* ── EXPERIENCE TIMELINE ── */
+  #experience { position: relative; }
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 60px auto 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+  .timeline-item {
+    padding: 0 0 48px 40px;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .timeline-item.visible { opacity: 1; transform: translateX(0); }
+  .timeline-dot {
+    position: absolute;
+    left: -5px; top: 4px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(200,245,74,0.1);
+  }
+  .timeline-date {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 600; margin-bottom: 8px;
+  }
+  .timeline-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .timeline-company { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .timeline-desc {
+    font-size: 15px; color: rgba(245,242,236,0.6);
+    line-height: 1.65; font-weight: 300;
+  }
+
+  /* ── HAVEN STARTUP ── */
+  #haven {
+    background: linear-gradient(135deg, #0d0520 0%, #1a0a2e 50%, #0a0a0a 100%);
+    border-top: 1px solid rgba(255,107,53,0.1);
+    border-bottom: 1px solid rgba(255,107,53,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  #haven::before {
+    content: '';
+    position: absolute;
+    top: -40%; left: 30%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,107,53,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .haven-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .haven-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.2);
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 24px;
+  }
+  .haven-h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    margin-bottom: 24px;
+  }
+  .haven-h2 em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--accent2);
+  }
+  .haven-desc {
+    font-size: 17px; color: rgba(245,242,236,0.55);
+    line-height: 1.7; font-weight: 300; margin-bottom: 36px;
+  }
+  .haven-stats {
+    display: flex; gap: 32px; margin-bottom: 36px;
+  }
+  .haven-stat .h-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px; font-weight: 800; color: var(--accent2);
+    line-height: 1;
+  }
+  .haven-stat .h-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .haven-visual {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .haven-ring {
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,107,53,0.15);
+    position: absolute;
+    animation: spinRing 20s linear infinite;
+  }
+  .haven-ring:nth-child(2) { width: 200px; height: 200px; animation-duration: 14s; animation-direction: reverse; border-color: rgba(200,245,74,0.1); }
+  .haven-ring:nth-child(3) { width: 340px; height: 340px; animation-duration: 28s; border-color: rgba(255,107,53,0.07); }
+  @keyframes spinRing { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  .haven-center {
+    position: relative; z-index: 2;
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.25);
+    width: 120px; height: 120px;
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 32px; font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: -0.04em;
+    backdrop-filter: blur(20px);
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    text-align: center;
+    padding: 120px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  #contact::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: 20%;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(200,245,74,0.04) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .contact-h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 8vw, 120px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    margin-bottom: 24px;
+  }
+  .contact-h2 em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: rgba(245,242,236,0.3);
+  }
+  .contact-sub {
+    font-size: 18px; color: rgba(245,242,236,0.5);
+    max-width: 480px; margin: 0 auto 48px;
+    font-weight: 300; line-height: 1.6;
+  }
+  .contact-links {
+    display: flex; justify-content: center; align-items: center;
+    gap: 16px; flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    color: rgba(245,242,236,0.7);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    transition: all 0.2s;
+  }
+  .contact-link:hover {
+    color: var(--accent);
+    border-color: rgba(200,245,74,0.3);
+    background: rgba(200,245,74,0.05);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 28px 40px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-copy {
+    font-size: 13px; color: var(--muted);
+  }
+  .footer-love {
+    font-size: 13px; color: var(--muted);
+  }
+  .footer-love span { color: var(--accent); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #hero { grid-template-columns: 1fr; padding: 120px 24px 80px; }
+    .hero-right { order: -1; }
+    .hero-img-wrap { width: min(320px, 100%); }
+    #about { grid-template-columns: 1fr; gap: 40px; padding: 80px 24px; }
+    .about-facts { grid-template-columns: 1fr 1fr; }
+    #skills { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+    .skills-left { position: static; }
+    .proj-card.large, .proj-card.small, .proj-card.half { grid-column: span 12; }
+    section { padding: 80px 24px; }
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .haven-grid { grid-template-columns: 1fr; gap: 48px; }
+    #contact { padding: 80px 24px; }
+    footer { padding: 24px; flex-direction: column; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    .haven-stats { gap: 20px; flex-wrap: wrap; }
+    .hero-badge2 { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-name">
+    <span style="animation-delay:0.1s">Z</span>
+    <span style="animation-delay:0.15s">A</span>
+    <span style="animation-delay:0.2s">I</span>
+    <span style="animation-delay:0.25s">R</span>
+    <span style="animation-delay:0.3s">A</span>
+    <span style="animation-delay:0.38s; color:var(--accent)">.</span>
+  </div>
+  <div class="loader-bar"><div class="loader-progress"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">ZA<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#haven">Startup</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:iamzaira2@gmail.com" class="nav-cta">Let's Talk</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Available for freelance & collabs</div>
+    <h1 class="hero-h1">
+      Designing<br>
+      <em>Experiences</em><br>
+      that <em>Last.</em>
+    </h1>
+    <p class="hero-sub">
+      UX/UI designer from Kashmir. I craft clean, intentional digital products — from brand identity to full-stack product design. Currently building Haven.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View My Work →</a>
+      <a href="#contact" class="btn-ghost">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="222fa449-d602-4112-b2a0-17f57abfa908.jpg" alt="Zaira Akhtar" class="hero-photo" onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#2a2a2a)';this.style.minHeight='480px';this.removeAttribute('src')">
+      <div class="hero-badge">
+        <div class="badge-num">4+</div>
+        <div class="badge-label">Years designing</div>
+      </div>
+      <div class="hero-badge2">
+        <div class="b2-label">Kashmir ✦ Bengaluru</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item"><div class="marquee-dot"></div>UI/UX Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Brand Identity</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Product Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Visual Storytelling</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Web Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Packaging</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Startup Cofounder</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Information Architecture</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>UI/UX Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Brand Identity</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Product Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Visual Storytelling</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Web Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Packaging</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Startup Cofounder</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Information Architecture</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-photo-wrap reveal">
+    <img src="P4260005.JPG" alt="Zaira at Scaler" class="about-photo" onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#2a2a2a)';this.style.display='block';this.removeAttribute('src')">
+    <div class="about-sticker">Designer & Builder ✦</div>
+    <div class="about-sticker2">
+      <div class="s2-num">2025</div>
+      <div class="s2-text">B.Sc Computer Science<br>Scaler School of Tech</div>
+    </div>
+  </div>
+  <div class="about-body reveal reveal-delay-1">
+    <div class="section-label">About Me</div>
+    <h2 class="section-h2">I design with <em>intention</em> and build with purpose.</h2>
+    <div class="about-bio">
+      <p>Hi, I'm Zaira — a 19-year-old UI/UX designer from <strong>Kashmir</strong>, currently studying Computer Science at <strong>Scaler School of Technology</strong> in Bengaluru.</p>
+      <br>
+      <p>I believe the best digital products live at the intersection of <strong>clean aesthetics and deep usability</strong>. I've designed everything from product labels and brand identities to full website frontends and dashboard interfaces.</p>
+      <br>
+      <p>When I'm not designing, I'm co-building <strong>Haven</strong> — a startup exploring how design and technology can reshape how people find belonging.</p>
+    </div>
+    <div class="about-facts">
+      <div class="fact-card">
+        <div class="fact-label">Based in</div>
+        <div class="fact-value">Bengaluru, India</div>
+      </div>
+      <div class="fact-card">
+        <div class="fact-label">From</div>
+        <div class="fact-value">Kashmir ✦</div>
+      </div>
+      <div class="fact-card">
+        <div class="fact-label">Languages</div>
+        <div class="fact-value">English · Urdu</div>
+      </div>
+      <div class="fact-card">
+        <div class="fact-label">Status</div>
+        <div class="fact-value" style="color:var(--accent)">Open to Work</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header reveal">
+    <div>
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-h2">Projects that <em>moved</em> the needle.</h2>
+    </div>
+    <a href="https://www.mridhuvassociates.com" target="_blank" class="btn-ghost" style="margin-bottom:8px">Live Site →</a>
+  </div>
+
+  <div class="projects-grid">
+    <!-- MRIDHUV FEATURED -->
+    <div class="proj-card large reveal" style="background:linear-gradient(135deg,#0a1a0a,#152515)">
+      <div class="proj-bg">
+        <svg class="proj-bg-pattern" viewBox="0 0 600 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.15">
+          <rect x="40" y="40" width="520" height="400" rx="12" stroke="#4ade80" stroke-width="0.5"/>
+          <rect x="60" y="80" width="200" height="14" rx="3" fill="#4ade80"/>
+          <rect x="60" y="104" width="120" height="8" rx="2" fill="#4ade80" opacity="0.5"/>
+          <rect x="60" y="130" width="480" height="1" fill="#4ade80" opacity="0.2"/>
+          <rect x="60" y="150" width="140" height="100" rx="6" fill="#4ade80" opacity="0.08"/>
+          <rect x="220" y="150" width="140" height="100" rx="6" fill="#4ade80" opacity="0.08"/>
+          <rect x="380" y="150" width="140" height="100" rx="6" fill="#4ade80" opacity="0.08"/>
+          <rect x="60" y="270" width="480" height="60" rx="6" fill="#4ade80" opacity="0.05"/>
+          <rect x="60" y="350" width="200" height="40" rx="20" fill="#4ade80" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="proj-overlay"></div>
+      <div class="proj-year">2025</div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-content">
+        <div class="proj-tags">
+          <span class="proj-tag">UI/UX Design</span>
+          <span class="proj-tag">Frontend</span>
+          <span class="proj-tag">Content Strategy</span>
+          <span class="proj-tag">SEO</span>
+        </div>
+        <div class="proj-name">Mridhuv Associates</div>
+        <div class="proj-desc">Full website design and development for a legal &amp; business consultancy — clean UI, responsive layouts, SEO-structured service pages.</div>
+      </div>
+    </div>
+
+    <!-- HAVEN -->
+    <div class="proj-card small reveal reveal-delay-1" style="background:linear-gradient(135deg,#100820,#1e0e35)">
+      <div class="proj-bg">
+        <svg class="proj-bg-pattern" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.18">
+          <circle cx="200" cy="200" r="140" stroke="#ff6b35" stroke-width="0.5"/>
+          <circle cx="200" cy="200" r="90" stroke="#ff6b35" stroke-width="0.5" opacity="0.5"/>
+          <circle cx="200" cy="200" r="40" fill="#ff6b35" opacity="0.08"/>
+          <path d="M200 60 L200 200" stroke="#ff6b35" stroke-width="0.5" opacity="0.4"/>
+          <path d="M60 200 L200 200" stroke="#ff6b35" stroke-width="0.5" opacity="0.4"/>
+          <path d="M320 100 L200 200" stroke="#ff6b35" stroke-width="0.5" opacity="0.4"/>
+          <rect x="160" y="160" width="80" height="80" rx="8" fill="#ff6b35" opacity="0.05" stroke="#ff6b35" stroke-width="0.5"/>
+          <text x="200" y="208" text-anchor="middle" fill="#ff6b35" font-size="22" font-weight="700" opacity="0.3" font-family="system-ui">HAVEN</text>
+        </svg>
+      </div>
+      <div class="proj-overlay" style="background:linear-gradient(to top,rgba(16,8,32,0.97) 0%,rgba(16,8,32,0.4) 55%,transparent 100%)"></div>
+      <div class="proj-year">2025</div>
+      <div class="proj-arrow" style="border-color:rgba(255,107,53,0.2)">↗</div>
+      <div class="proj-content">
+        <div class="proj-tags">
+          <span class="proj-tag" style="color:var(--accent2);background:rgba(255,107,53,0.1);border-color:rgba(255,107,53,0.2)">Startup</span>
+          <span class="proj-tag" style="color:var(--accent2);background:rgba(255,107,53,0.1);border-color:rgba(255,107,53,0.2)">Product Design</span>
+        </div>
+        <div class="proj-name">Haven</div>
+        <div class="proj-desc">Cofounder &amp; lead designer. A platform where design meets community — helping people find where they truly belong.</div>
+      </div>
+    </div>
+
+    <!-- OOZY PACKAGING -->
+    <div class="proj-card half reveal" style="background:linear-gradient(135deg,#1a1500,#2a2200)">
+      <div class="proj-bg">
+        <svg class="proj-bg-pattern" viewBox="0 0 500 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2">
+          <rect x="160" y="20" width="180" height="260" rx="16" stroke="#f5e642" stroke-width="1"/>
+          <rect x="175" y="40" width="150" height="80" rx="8" fill="#f5e642" opacity="0.1"/>
+          <text x="250" y="92" text-anchor="middle" fill="#f5e642" font-size="28" font-weight="900" font-family="system-ui" opacity="0.5">OOZY</text>
+          <rect x="185" y="135" width="130" height="60" rx="6" fill="#f5e642" opacity="0.06"/>
+          <rect x="185" y="205" width="60" height="16" rx="3" fill="#f5e642" opacity="0.2"/>
+          <rect x="255" y="205" width="60" height="16" rx="3" fill="#f5e642" opacity="0.2"/>
+          <rect x="185" y="230" width="130" height="8" rx="2" fill="#f5e642" opacity="0.1"/>
+        </svg>
+      </div>
+      <div class="proj-overlay"></div>
+      <div class="proj-year">2025</div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-content">
+        <div class="proj-tags">
+          <span class="proj-tag">Packaging</span>
+          <span class="proj-tag">Label Design</span>
+        </div>
+        <div class="proj-name">Oozy — Biotech Solutions</div>
+        <div class="proj-desc">Cleaning product labels balancing clarity, visual appeal, and consumer-friendly design.</div>
+      </div>
+    </div>
+
+    <!-- LOGOS -->
+    <div class="proj-card half reveal reveal-delay-1" style="background:linear-gradient(135deg,#050e1a,#0a1a2e)">
+      <div class="proj-bg">
+        <svg class="proj-bg-pattern" viewBox="0 0 500 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2">
+          <rect x="40" y="40" width="180" height="90" rx="10" stroke="#4a9eff" stroke-width="0.8"/>
+          <text x="130" y="95" text-anchor="middle" fill="#4a9eff" font-size="14" font-weight="700" font-family="system-ui" opacity="0.7">UNIQUE PLANNERS</text>
+          <rect x="280" y="40" width="180" height="90" rx="10" stroke="#4a9eff" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="320" cy="70" r="12" fill="#4a9eff" opacity="0.15" stroke="#4a9eff" stroke-width="0.8"/>
+          <text x="370" y="83" text-anchor="middle" fill="#4a9eff" font-size="11" font-weight="700" font-family="system-ui" opacity="0.6">HIDDEN BAKERS</text>
+          <rect x="40" y="160" width="420" height="2" fill="#4a9eff" opacity="0.05"/>
+          <rect x="40" y="180" width="380" height="80" rx="8" fill="#4a9eff" opacity="0.04" stroke="#4a9eff" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="proj-overlay"></div>
+      <div class="proj-year">2024</div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-content">
+        <div class="proj-tags">
+          <span class="proj-tag">Brand Identity</span>
+          <span class="proj-tag">Logo Design</span>
+        </div>
+        <div class="proj-name">Brand Identities</div>
+        <div class="proj-desc">Unique Planners — structured, architectural logo. Hidden Bakers — warm, handcrafted brand identity.</div>
+      </div>
+    </div>
+
+    <!-- POSTERS -->
+    <div class="proj-card full reveal" style="background:linear-gradient(135deg,#1a0800,#2e1000)">
+      <div class="proj-bg">
+        <svg class="proj-bg-pattern" viewBox="0 0 1200 280" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.15">
+          <rect x="40" y="20" width="200" height="240" rx="10" stroke="#ff6b35" stroke-width="0.8"/>
+          <rect x="60" y="40" width="160" height="100" rx="4" fill="#ff6b35" opacity="0.08"/>
+          <text x="140" y="180" text-anchor="middle" fill="#ff6b35" font-size="32" font-weight="900" font-family="system-ui" opacity="0.4">HAVEN</text>
+          <rect x="60" y="220" width="160" height="20" rx="3" fill="#ff6b35" opacity="0.07"/>
+          <rect x="280" y="20" width="200" height="240" rx="10" stroke="#ff6b35" stroke-width="0.8" opacity="0.5"/>
+          <rect x="300" y="40" width="160" height="100" rx="4" fill="#ff6b35" opacity="0.06"/>
+          <text x="380" y="180" text-anchor="middle" fill="#ff6b35" font-size="32" font-weight="900" font-family="system-ui" opacity="0.3">HAVEN</text>
+          <rect x="520" y="60" width="640" height="1" stroke="#ff6b35" stroke-width="0.5" opacity="0.2"/>
+          <text x="840" y="140" text-anchor="middle" fill="#ff6b35" font-size="14" font-weight="600" font-family="system-ui" opacity="0.3">Posters &amp; Promotional Creatives</text>
+        </svg>
+      </div>
+      <div class="proj-overlay"></div>
+      <div class="proj-year">2024</div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-content">
+        <div class="proj-tags">
+          <span class="proj-tag" style="color:var(--accent2);background:rgba(255,107,53,0.1);border-color:rgba(255,107,53,0.2)">Poster Design</span>
+          <span class="proj-tag" style="color:var(--accent2);background:rgba(255,107,53,0.1);border-color:rgba(255,107,53,0.2)">Freelance</span>
+        </div>
+        <div class="proj-name">Posters & Promotional Creatives</div>
+        <div class="proj-desc">Event posters for college hackathons, marketing creatives for local tuition centers, and promotional visuals — all balancing typography, color, and high-attention composition.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-left reveal">
+    <div class="section-label">Skills & Tools</div>
+    <h2 class="section-h2">Built for <em>craft</em> and clarity.</h2>
+    <p style="font-size:16px;color:rgba(245,242,236,0.5);line-height:1.7;font-weight:300;margin-top:16px;max-width:360px;">
+      From pixels to prototypes — I work across the full spectrum of design, with a growing command of frontend development.
+    </p>
+  </div>
+
+  <div>
+    <div class="skill-groups reveal reveal-delay-1">
+      <div>
+        <div class="skill-group-title">Design Skills</div>
+        <div class="skill-pills">
+          <span class="skill-pill accent">User Interface Design</span>
+          <span class="skill-pill accent">User Experience Design</span>
+          <span class="skill-pill">Visual Communication</span>
+          <span class="skill-pill">Information Architecture</span>
+          <span class="skill-pill">Typography & Color Theory</span>
+          <span class="skill-pill">Layout & Composition</span>
+          <span class="skill-pill">Prototyping</span>
+          <span class="skill-pill">Brand Identity Design</span>
+          <span class="skill-pill">Packaging & Label Design</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Tools & Technologies</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <span class="tool-icon">🎨</span>
+            <div class="tool-name">Figma</div>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon">✏️</span>
+            <div class="tool-name">Canva</div>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon">🌐</span>
+            <div class="tool-name">HTML5</div>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon">💅</span>
+            <div class="tool-name">CSS3</div>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon">⚡</span>
+            <div class="tool-name">JavaScript</div>
+          </div>
+          <div class="tool-card">
+            <span class="tool-icon">📱</span>
+            <div class="tool-name">Responsive</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="reveal" style="max-width:800px;margin:0 auto;">
+    <div class="section-label">Experience</div>
+    <h2 class="section-h2">The work that <em>shaped</em> me.</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">May 2025 — Sep 2025</div>
+      <div class="timeline-title">Packaging Designer</div>
+      <div class="timeline-company">Biotech Solutions</div>
+      <div class="timeline-desc">Designed labels for cleaning product lines with a focus on clarity, consistency, and visual appeal. Translated product requirements into clean, consumer-friendly packaging designs that stood out on shelf.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2025 — Present</div>
+      <div class="timeline-title">UI/UX Designer, Frontend & Content Strategy</div>
+      <div class="timeline-company">Mridhuv Associates</div>
+      <div class="timeline-desc">Designed and built the full website frontend for a legal and business consultancy. Created SEO-aware service pages, improved mobile responsiveness, and structured complex legal content into accessible, user-friendly layouts.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">December 2024</div>
+      <div class="timeline-title">Brand Identity & Logo Designer</div>
+      <div class="timeline-company">Unique Planners</div>
+      <div class="timeline-desc">Crafted a structured logo identity aligned with professional architectural values — emphasizing geometry, clarity, and timeless visual appeal.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">July 2024</div>
+      <div class="timeline-title">Logo Designer</div>
+      <div class="timeline-company">Hidden Bakers</div>
+      <div class="timeline-desc">Designed a warm, approachable logo reflecting a handcrafted bakery aesthetic — focused on simplicity, balance, and brand recall suitable for packaging and social media.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2025 — Present</div>
+      <div class="timeline-title">B.Sc in Computer Science</div>
+      <div class="timeline-company">Scaler School of Technology, Bengaluru</div>
+      <div class="timeline-desc">Studying computer science with a focus on software engineering fundamentals — building the technical depth to complement design thinking with real-world implementation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HAVEN STARTUP -->
+<section id="haven">
+  <div class="haven-grid">
+    <div class="reveal">
+      <div class="haven-tag">✦ Startup · Cofounder</div>
+      <h2 class="haven-h2">Building<br><em>Haven.</em></h2>
+      <p class="haven-desc">
+        Haven is where design meets belonging. As cofounder and lead designer, I'm shaping how this product looks, feels, and behaves — from brand identity to user flows and interaction design.
+      </p>
+      <div class="haven-stats">
+        <div class="haven-stat">
+          <div class="h-num">2025</div>
+          <div class="h-label">Founded</div>
+        </div>
+        <div class="haven-stat">
+          <div class="h-num">Design</div>
+          <div class="h-label">My role</div>
+        </div>
+        <div class="haven-stat">
+          <div class="h-num">Live</div>
+          <div class="h-label">Status</div>
+        </div>
+      </div>
+      <a href="mailto:iamzaira2@gmail.com" class="btn-primary" style="background:var(--accent2);display:inline-flex;">Talk to Me About It →</a>
+    </div>
+    <div class="haven-visual reveal reveal-delay-2">
+      <div class="haven-ring"></div>
+      <div class="haven-ring"></div>
+      <div class="haven-ring"></div>
+      <div class="haven-center">H.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center;margin-bottom:24px;" class="reveal">Contact</div>
+  <h2 class="contact-h2 reveal">
+    Let's build<br><em>something</em><br>remarkable.
+  </h2>
+  <p class="contact-sub reveal reveal-delay-1">
+    Open to freelance projects, full-time roles, and creative collaborations. If you have a problem worth designing, I want to hear about it.
+  </p>
+  <div class="contact-links reveal reveal-delay-2">
+    <a href="mailto:iamzaira2@gmail.com" class="contact-link">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      iamzaira2@gmail.com
+    </a>
+    <a href="tel:+916005496182" class="contact-link">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.26l3-.01a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l1.02-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      +91 6005 496 182
+    </a>
+    <a href="https://github.com/ZairaAk" target="_blank" class="contact-link">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      ZairaAk
+    </a>
+    <a href="https://www.mridhuvassociates.com" target="_blank" class="contact-link">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      mridhuvassociates.com
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2025 Zaira Akhtar. All rights reserved.</div>
+  <div class="footer-love">Designed & Built by <span>Zaira ✦</span></div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // LOADER
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hide');
+    }, 2000);
+  });
+
+  // NAV SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // TIMELINE REVEAL
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  const tlObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.2 });
+  timelineItems.forEach((item, i) => {
+    item.style.transitionDelay = `${i * 0.1}s`;
+    tlObserver.observe(item);
+  });
+
+  // MAGNETIC BUTTONS
+  document.querySelectorAll('.btn-primary, .nav-cta, .proj-arrow').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+
+  // PARALLAX HERO
+  window.addEventListener('scroll', () => {
+    const hero = document.querySelector('#hero .hero-right');
+    if (hero) { hero.style.transform = `translateY(${window.scrollY * 0.08}px)`; }
+    const heroBg = document.querySelector('.hero-bg');
+    if (heroBg) { heroBg.style.transform = `translateY(${window.scrollY * 0.15}px)`; }
+  });
+</script>
+</body>
+</html>
